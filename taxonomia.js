@@ -8,35 +8,71 @@
       .replace(/'/g, "&#39;");
   }
 
-  function formatTaxonText(text) {
-    const raw = String(text || "").trim();
-    if (!raw) return raw;
+  function formatSimpleTaxon(raw) {
+    const text = String(raw || "").trim();
+    if (!text) return "";
 
-    // Ordem, família e subfamília ficam sem itálico.
-    // Exemplos: Coleoptera, Diptera, Chrysopidae, Braconidae, Aphidiinae.
-    if (/^[A-Z][A-Za-z-]+$/.test(raw)) return escapeHTML(raw);
-    if (/(idae|inae|ini)$/i.test(raw)) return escapeHTML(raw);
+    // Ordens, famílias, subfamílias e outros níveis supragenéricos:
+    // ficam sem itálico.
+    if (/^[A-Z][A-Za-z-]+$/.test(text)) return escapeHTML(text);
+    if (/(idae|inae|ini)$/i.test(text)) return escapeHTML(text);
 
-    // Gênero + sp. -> somente o gênero em itálico.
-    let m = raw.match(/^([A-Z][a-zA-Z-]+)\s+(sp\.)$/);
+    // Gênero + sp.
+    let m = text.match(/^([A-Z][a-zA-Z-]+)\s+(sp\.)$/);
     if (m) return `<em>${escapeHTML(m[1])}</em> ${escapeHTML(m[2])}`;
 
-    // Espécie + autor/ano opcional -> gênero + epíteto em itálico;
-    // autoria e ano permanecem em fonte normal.
-    m = raw.match(/^([A-Z][a-zA-Z-]+)\s+([a-z][a-zA-Z-]+)(.*)$/);
+    // Espécie + autoria opcional.
+    m = text.match(/^([A-Z][a-zA-Z-]+)\s+([a-z][a-zA-Z-]+)(.*)$/);
     if (m) {
       return `<em>${escapeHTML(m[1])} ${escapeHTML(m[2])}</em>${escapeHTML(m[3])}`;
     }
 
-    return escapeHTML(raw);
+    // Gênero isolado.
+    m = text.match(/^([A-Z][a-zA-Z-]+)$/);
+    if (m) return `<em>${escapeHTML(m[1])}</em>`;
+
+    return escapeHTML(text);
+  }
+
+  function formatValidatedTaxon(raw) {
+    const text = String(raw || "").trim();
+    if (!text) return "";
+
+    // Trata cadeias mistas separadas por ponto e vírgula, por exemplo:
+    // "Ichneumonidae; Ophion sp."
+    // "Scelionidae; Calliscelio sp."
+    const parts = text.split(";").map(p => p.trim());
+
+    return parts.map(part => {
+      if (!part) return "";
+
+      // Família/subfamília/ordem: sem itálico.
+      if (/^[A-Z][A-Za-z-]+$/.test(part) || /(idae|inae|ini)$/i.test(part)) {
+        return escapeHTML(part);
+      }
+
+      // Gênero + sp.
+      let m = part.match(/^([A-Z][a-zA-Z-]+)\s+(sp\.)$/);
+      if (m) return `<em>${escapeHTML(m[1])}</em> ${escapeHTML(m[2])}`;
+
+      // Espécie + autoria opcional.
+      m = part.match(/^([A-Z][a-zA-Z-]+)\s+([a-z][a-zA-Z-]+)(.*)$/);
+      if (m) {
+        return `<em>${escapeHTML(m[1])} ${escapeHTML(m[2])}</em>${escapeHTML(m[3])}`;
+      }
+
+      // Gênero isolado.
+      m = part.match(/^([A-Z][a-zA-Z-]+)$/);
+      if (m) return `<em>${escapeHTML(m[1])}</em>`;
+
+      return escapeHTML(part);
+    }).join("; ");
   }
 
   function fixCards(root = document) {
     root.querySelectorAll(".taxon").forEach((el) => {
-      if (el.dataset.taxonomiaFormatada === "1") return;
       const original = el.textContent.trim();
-      el.innerHTML = formatTaxonText(original);
-      el.dataset.taxonomiaFormatada = "1";
+      el.innerHTML = formatSimpleTaxon(original);
     });
   }
 
@@ -44,10 +80,37 @@
     root.querySelectorAll(".detail-grid .label").forEach((label) => {
       if (label.textContent.trim() !== "Táxon validado") return;
       const value = label.nextElementSibling;
-      if (!value || value.dataset.taxonomiaFormatada === "1") return;
+      if (!value) return;
       const original = value.textContent.trim();
-      value.innerHTML = formatTaxonText(original);
-      value.dataset.taxonomiaFormatada = "1";
+      value.innerHTML = formatValidatedTaxon(original);
+    });
+
+    // Também corrige nomes científicos dentro de "Observação funcional"
+    // quando aparecem explicitamente como "Gênero sp." ou espécie binomial.
+    root.querySelectorAll(".detail-note").forEach((note) => {
+      if (note.dataset.taxonomiaV2 === "1") return;
+      let html = note.innerHTML;
+
+      // Gênero sp.
+      html = html.replace(
+        /\b([A-Z][a-zA-Z-]+)\s+(sp\.)\b/g,
+        function (_, g, sp) {
+          if (/(idae|inae|ini)$/i.test(g)) return `${g} ${sp}`;
+          return `<em>${g}</em> ${sp}`;
+        }
+      );
+
+      // Binômios simples em texto corrido.
+      html = html.replace(
+        /\b([A-Z][a-zA-Z-]+)\s+([a-z][a-zA-Z-]+)\b/g,
+        function (_, g, e) {
+          if (/(idae|inae|ini)$/i.test(g)) return `${g} ${e}`;
+          return `<em>${g} ${e}</em>`;
+        }
+      );
+
+      note.innerHTML = html;
+      note.dataset.taxonomiaV2 = "1";
     });
   }
 
@@ -58,8 +121,6 @@
 
   applyFormatting();
 
-  // O site cria cartões e fichas dinamicamente ao filtrar, paginar e abrir registros.
-  // O observador reaplica a formatação sempre que novos elementos aparecem.
   const observer = new MutationObserver(() => applyFormatting());
   observer.observe(document.body, { childList: true, subtree: true });
 })();
