@@ -261,11 +261,11 @@ footer{padding:28px clamp(18px,5vw,72px);background:#092f21;color:#fff;display:f
 /* Ajustes individuais para equilibrar os logos */
 
 .footer-logo-item:nth-child(1) img{
-  max-height:92px;
+  max-height:115px;
 }
 
 .footer-logo-item:nth-child(2) img{
-  max-height:90px;
+  max-height:95px;
 }
 
 .footer-logo-item:nth-child(3) img{
