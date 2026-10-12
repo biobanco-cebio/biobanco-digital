@@ -118,7 +118,155 @@ function renderRecords(){
   pager(total);
 }
 function pager(t){const p=$('#pagination');p.innerHTML='';if(t<=1)return;const mk=(x,n,a)=>{const b=document.createElement('button');b.textContent=x;if(a)b.classList.add('active');b.onclick=()=>{page=n;renderRecords();location.hash='pesquisar'};return b};if(page>1)p.appendChild(mk('‹',page-1));let st=Math.max(1,page-2),en=Math.min(t,st+4);for(let n=st;n<=en;n++)p.appendChild(mk(n,n,n===page));if(page<t)p.appendChild(mk('›',page+1))}
-function openRecord(code){const r=REGISTROS.find(x=>x.codigo===code);if(!r)return;const rows=[['Código',r.codigo],['Cultura',r.cultura],['Ordem',r.ordem],['Família / grupo',r.familia],['Táxon validado',r.taxonomia_validada],['Resolução taxonômica',r.resolucao_taxonomica],['Categoria funcional',r.categoria_funcional],['Nicho ecológico',r.nicho_ecologico],['Fonte taxonômica',r.fonte_taxonomica]];$('#recordDetail').innerHTML=`<div class="detail"><div class="detail-media"><img id="detailImg" alt="Registro ${esc(r.codigo)}"></div><div class="detail-copy"><span class="eyebrow">REGISTRO</span><h2>${esc(r.codigo)}</h2><div class="detail-grid">${rows.map(([a,b])=>`<div class="label">${esc(a)}</div><div>${a==='Táxon validado'?formatTaxonHTML(b,r.resolucao_taxonomica):esc(b||'—')}</div>`).join('')}</div>${r.observacao_funcional?`<div class="detail-note"><strong>Observação funcional</strong><br>${esc(r.observacao_funcional)}</div>`:''}</div></div>`;candidate($('#detailImg'),r);$('#recordDialog').showModal()}
+function openRecord(code){
+  const r=REGISTROS.find(x=>x.codigo===code);
+  if(!r)return;
+
+  const categoria=r.categoria_funcional || 'Indeterminado';
+  const resolucao=r.resolucao_taxonomica || 'Não determinada';
+
+  $('#recordDetail').innerHTML=`
+    <div class="detail detail-v2">
+
+      <div class="detail-media detail-media-v2">
+        <img
+          id="detailImg"
+          alt="Registro ${esc(r.codigo)}"
+        >
+      </div>
+
+      <div class="detail-copy detail-copy-v2">
+
+        <span class="eyebrow">REGISTRO</span>
+
+        <h2 class="detail-code">
+          ${esc(r.codigo)}
+        </h2>
+
+        <div class="detail-badges">
+          <span class="detail-badge categoria">
+            ${esc(categoria)}
+          </span>
+
+          <span class="detail-badge">
+            ${esc(resolucao)}
+          </span>
+
+          <span class="detail-badge validado">
+            ✓ Validado
+          </span>
+        </div>
+
+
+        <section class="detail-section">
+
+          <h3>
+            Identificação taxonômica
+          </h3>
+
+          <div class="detail-info">
+
+            <div>
+              <span>Ordem</span>
+              <strong>${esc(r.ordem || '—')}</strong>
+            </div>
+
+            <div>
+              <span>Família / grupo</span>
+              <strong>${esc(r.familia || '—')}</strong>
+            </div>
+
+            <div>
+              <span>Táxon validado</span>
+              <strong>
+                ${formatTaxonHTML(
+                  r.taxonomia_validada || '',
+                  r.resolucao_taxonomica
+                )}
+              </strong>
+            </div>
+
+            <div>
+              <span>Nível de identificação</span>
+              <strong>${esc(resolucao)}</strong>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <section class="detail-section">
+
+          <h3>
+            Função ecológica
+          </h3>
+
+          <div class="detail-info">
+
+            <div>
+              <span>Categoria funcional</span>
+              <strong>${esc(categoria)}</strong>
+            </div>
+
+            <div>
+              <span>Nicho ecológico</span>
+              <strong>${esc(r.nicho_ecologico || '—')}</strong>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        <section class="detail-section">
+
+          <h3>
+            Validação taxonômica
+          </h3>
+
+          <div class="detail-info">
+
+            <div>
+              <span>Fonte taxonômica</span>
+              <strong>${esc(r.fonte_taxonomica || '—')}</strong>
+            </div>
+
+            <div>
+              <span>Status</span>
+              <strong class="status-validado">
+                ✓ Validado
+              </strong>
+            </div>
+
+          </div>
+
+        </section>
+
+
+        ${
+          r.observacao_funcional
+          ? `
+            <section class="detail-section observacao">
+              <h3>Observação funcional</h3>
+
+              <p>
+                ${esc(r.observacao_funcional)}
+              </p>
+            </section>
+          `
+          : ''
+        }
+
+      </div>
+
+    </div>
+  `;
+
+  candidate($('#detailImg'),r);
+
+  $('#recordDialog').showModal();
+}
 function renderCrops(){$('#cropGrid').innerHTML=CULTURAS.map(c=>`<article class="crop-card"><span class="eyebrow">${esc(c.cultura.toUpperCase())}</span><h3>${esc(c.cultura)}</h3><div class="crop-total">${c.total}</div><small>registros</small><div class="crop-stats">${Object.entries(c.categorias).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`<span>${esc(k)}: ${v}</span>`).join('')}</div><button class="btn primary" data-crop="${esc(c.cultura)}">Explorar registros</button></article>`).join('');$$('[data-crop]').forEach(b=>b.onclick=()=>{$('#fCultura').value=b.dataset.crop;page=1;applyFilters();location.hash='pesquisar'})}
 function renderStats(cultura){const c=CULTURAS.find(x=>x.cultura===cultura);if(!c)return;const es=Object.entries(c.categorias).sort((a,b)=>b[1]-a[1]),mx=Math.max(...es.map(x=>x[1]),1);$('#functionalBars').innerHTML=es.map(([k,v])=>`<div class="bar-row"><span>${esc(k)}</span><div class="bar-track"><div class="bar-fill" style="width:${v/mx*100}%"></div></div><strong>${v}</strong></div>`).join('');const idx=findIdx(cultura),pairs=[];if(idx)Object.entries(idx).forEach(([k,v])=>{if(!k.toLowerCase().includes('cultura')&&v!==null&&v!=='')pairs.push([k,v])});$('#indicesTable').innerHTML=(pairs.length?pairs:[['Cultura',cultura]]).map(([k,v])=>`<div>${esc(k)}</div><div class="v">${fmt(v)}</div>`).join('')}
 function findIdx(c){const n=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();return INDICES.find(r=>Object.values(r).some(v=>n(v)===n(c)))}
