@@ -26,7 +26,97 @@ function formatTaxonHTML(text,resolucao=''){
 
   return raw.split(';').map(formatParte).join('; ');
 }
-function renderRecords(){const total=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));if(page>total)page=total;const s=filtered.slice((page-1)*PAGE_SIZE,page*PAGE_SIZE);$('#recordsGrid').innerHTML=s.map(r=>`<article class="record-card"><div class="record-image-wrap"><img class="record-image" alt="Registro ${esc(r.codigo)}" data-img="${esc(r.codigo)}"></div><div class="record-body"><div class="record-code">${esc(r.codigo)}</div><div class="taxon">${formatTaxonHTML(taxon(r),r.resolucao_taxonomica)}</div><div class="meta">${esc(r.familia||r.ordem)}<br>${esc(r.cultura)}</div><span class="pill">${esc(r.categoria_funcional||'Indeterminado')}</span><button class="btn primary" data-open="${esc(r.codigo)}">Ver registro</button></div></article>`).join('')||'<div class="card">Nenhum registro encontrado.</div>';$$('[data-img]').forEach(i=>{const r=REGISTROS.find(x=>x.codigo===i.dataset.img);if(r)candidate(i,r)});$$('[data-open]').forEach(b=>b.onclick=()=>openRecord(b.dataset.open));pager(total)}
+function renderRecords(){
+  const total=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
+
+  if(page>total) page=total;
+
+  const s=filtered.slice(
+    (page-1)*PAGE_SIZE,
+    page*PAGE_SIZE
+  );
+
+  $('#recordsGrid').innerHTML=s.map(r=>{
+
+    const temGenero=
+      r.genero_taxon_validado &&
+      !/^indeterminado$/i.test(r.genero_taxon_validado);
+
+    const taxonPrincipal=
+      temGenero
+        ? r.genero_taxon_validado
+        : r.ordem;
+
+    const taxonSecundario=
+      temGenero
+        ? (r.familia || '')
+        : (
+            r.familia &&
+            r.familia !== 'Indeterminado'
+              ? r.familia
+              : ''
+          );
+
+    return `
+      <article class="record-card">
+
+        <div class="record-image-wrap">
+          <img
+            class="record-image"
+            alt="Registro ${esc(r.codigo)}"
+            data-img="${esc(r.codigo)}"
+          >
+        </div>
+
+        <div class="record-body">
+
+          <div class="record-code">
+            ${esc(r.codigo)}
+          </div>
+
+          <div class="taxon">
+            ${formatTaxonHTML(
+              taxonPrincipal,
+              r.resolucao_taxonomica
+            )}
+          </div>
+
+          <div class="meta">
+            ${taxonSecundario ? esc(taxonSecundario) + '<br>' : ''}
+            ${esc(r.cultura)}
+          </div>
+
+          <span class="pill">
+            ${esc(r.categoria_funcional || 'Indeterminado')}
+          </span>
+
+          <button
+            class="btn primary"
+            data-open="${esc(r.codigo)}"
+          >
+            Ver registro
+          </button>
+
+        </div>
+      </article>
+    `;
+  }).join('') ||
+  '<div class="card">Nenhum registro encontrado.</div>';
+
+  $$('[data-img]').forEach(img=>{
+    const r=REGISTROS.find(
+      x=>x.codigo===img.dataset.img
+    );
+
+    if(r) candidate(img,r);
+  });
+
+  $$('[data-open]').forEach(btn=>{
+    btn.onclick=()=>openRecord(btn.dataset.open);
+  });
+
+  pager(total);
+}
 function pager(t){const p=$('#pagination');p.innerHTML='';if(t<=1)return;const mk=(x,n,a)=>{const b=document.createElement('button');b.textContent=x;if(a)b.classList.add('active');b.onclick=()=>{page=n;renderRecords();location.hash='pesquisar'};return b};if(page>1)p.appendChild(mk('‹',page-1));let st=Math.max(1,page-2),en=Math.min(t,st+4);for(let n=st;n<=en;n++)p.appendChild(mk(n,n,n===page));if(page<t)p.appendChild(mk('›',page+1))}
 function openRecord(code){const r=REGISTROS.find(x=>x.codigo===code);if(!r)return;const rows=[['Código',r.codigo],['Cultura',r.cultura],['Ordem',r.ordem],['Família / grupo',r.familia],['Táxon validado',r.taxonomia_validada],['Resolução taxonômica',r.resolucao_taxonomica],['Categoria funcional',r.categoria_funcional],['Nicho ecológico',r.nicho_ecologico],['Fonte taxonômica',r.fonte_taxonomica]];$('#recordDetail').innerHTML=`<div class="detail"><div class="detail-media"><img id="detailImg" alt="Registro ${esc(r.codigo)}"></div><div class="detail-copy"><span class="eyebrow">REGISTRO</span><h2>${esc(r.codigo)}</h2><div class="detail-grid">${rows.map(([a,b])=>`<div class="label">${esc(a)}</div><div>${a==='Táxon validado'?formatTaxonHTML(b,r.resolucao_taxonomica):esc(b||'—')}</div>`).join('')}</div>${r.observacao_funcional?`<div class="detail-note"><strong>Observação funcional</strong><br>${esc(r.observacao_funcional)}</div>`:''}</div></div>`;candidate($('#detailImg'),r);$('#recordDialog').showModal()}
 function renderCrops(){$('#cropGrid').innerHTML=CULTURAS.map(c=>`<article class="crop-card"><span class="eyebrow">${esc(c.cultura.toUpperCase())}</span><h3>${esc(c.cultura)}</h3><div class="crop-total">${c.total}</div><small>registros</small><div class="crop-stats">${Object.entries(c.categorias).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`<span>${esc(k)}: ${v}</span>`).join('')}</div><button class="btn primary" data-crop="${esc(c.cultura)}">Explorar registros</button></article>`).join('');$$('[data-crop]').forEach(b=>b.onclick=()=>{$('#fCultura').value=b.dataset.crop;page=1;applyFilters();location.hash='pesquisar'})}
