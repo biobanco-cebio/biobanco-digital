@@ -1,0 +1,70 @@
+[
+  {
+    "cultura": "Algodão",
+    "slug": "algodao",
+    "total": 54,
+    "categorias": {
+      "Indeterminado": 19,
+      "Parasitoide": 27,
+      "Predador": 5,
+      "Polinizador": 3
+    }
+  },
+  {
+    "cultura": "Cebola",
+    "slug": "cebola",
+    "total": 48,
+    "categorias": {
+      "Parasitoide": 19,
+      "Predador": 13,
+      "Polinizador": 3,
+      "Indeterminado": 13
+    }
+  },
+  {
+    "cultura": "Cenoura",
+    "slug": "cenoura",
+    "total": 34,
+    "categorias": {
+      "Parasitoide": 16,
+      "Indeterminado": 8,
+      "Predador": 9,
+      "Polinizador": 1
+    }
+  },
+  {
+    "cultura": "Milho",
+    "slug": "milho",
+    "total": 65,
+    "categorias": {
+      "Indeterminado": 16,
+      "Polinizador": 4,
+      "Parasitoide": 30,
+      "Predador": 15
+    }
+  },
+  {
+    "cultura": "Soja",
+    "slug": "soja",
+    "total": 42,
+    "categorias": {
+      "Predador": 12,
+      "Parasitoide": 15,
+      "Polinizador": 3,
+      "Indeterminado": 12
+    }
+  },
+  {
+    "cultura": "Tomate industrial",
+    "slug": "tomate",
+    "total": 64,
+    "categorias": {
+      "Predador": 23,
+      "Indeterminado": 15,
+      "Parasitoide": 22,
+      "Fitófago": 1,
+      "Polinizador": 2,
+      "Outro": 1
+    }
+  }
+]

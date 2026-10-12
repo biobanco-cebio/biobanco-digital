@@ -1,0 +1,3 @@
+Coloque nesta pasta apenas as imagens finais com fundo branco.
+Mantenha o código como nome do arquivo. Ex.: CEB1.jpg, M61.png.
+Extensões aceitas: .jpg, .jpeg, .png, .webp.

@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="BioBanco Digital de Organismos Não Alvo em Sistemas Agrícolas">
+<title>BioBanco Digital</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="topbar">
+<a class="brand" href="#inicio"><span class="brand-mark">◒</span><span>BioBanco Digital</span></a>
+<button id="menuBtn" class="menu-btn" aria-label="Abrir menu">☰</button>
+<nav id="nav">
+<a href="#inicio">Início</a><a href="#pesquisar">Pesquisar</a><a href="#culturas">Culturas</a>
+<a href="#estatisticas">Estatísticas</a><a href="#sobre">Sobre</a>
+</nav>
+</header>
+<main>
+<section id="inicio" class="hero section">
+<div class="hero-copy">
+<span class="eyebrow">BIOBANCO DIGITAL</span>
+<h1>Organismos Não Alvo em Sistemas Agrícolas</h1>
+<p>Plataforma para consulta de registros taxonômicos, funcionais e fotográficos associados a diferentes culturas agrícolas.</p>
+<div class="hero-actions">
+<a class="btn primary" href="#pesquisar">Pesquisar registros</a>
+<a class="btn secondary" href="#culturas">Explorar culturas</a>
+<a class="btn secondary" href="#estatisticas">Ver estatísticas</a>
+</div>
+<div class="kpis">
+<div><strong id="kpiTotal">—</strong><span>registros</span></div>
+<div><strong id="kpiCulturas">6</strong><span>culturas</span></div>
+<div><strong id="kpiCategorias">—</strong><span>categorias funcionais</span></div>
+</div></div>
+<div class="hero-art"><div class="specimen-card"><span class="specimen-icon">⌁</span><strong>Registros revisados</strong><small>Taxonomia • Função ecológica • Imagem</small></div></div>
+</section>
+
+<section id="pesquisar" class="section">
+<div class="section-head"><div><span class="eyebrow">CONSULTA</span><h2>Pesquisar registros</h2><p>Use os filtros para localizar organismos por cultura, taxonomia e função ecológica.</p></div>
+<div class="result-count"><strong id="resultCount">0</strong> registros encontrados</div></div>
+<div class="search-layout">
+<aside class="filters card">
+<label>Código<input id="fCodigo" type="search" placeholder="Ex.: CEB1, M61, T64"></label>
+<label>Cultura<select id="fCultura"><option value="">Todas</option></select></label>
+<label>Ordem<select id="fOrdem"><option value="">Todas</option></select></label>
+<label>Família / grupo<select id="fFamilia"><option value="">Todas</option></select></label>
+<label>Categoria funcional<select id="fCategoria"><option value="">Todas</option></select></label>
+<label>Resolução taxonômica<select id="fResolucao"><option value="">Todas</option></select></label>
+<button id="clearFilters" class="btn secondary full">Limpar filtros</button>
+</aside>
+<div><div id="recordsGrid" class="records-grid"></div><div id="pagination" class="pagination"></div></div>
+</div></section>
+
+<section id="culturas" class="section alt">
+<div class="section-head"><div><span class="eyebrow">COLEÇÕES</span><h2>Culturas</h2><p>Selecione uma cultura para explorar seus registros.</p></div></div>
+<div id="cropGrid" class="crop-grid"></div>
+</section>
+
+<section id="estatisticas" class="section">
+<div class="section-head"><div><span class="eyebrow">DIVERSIDADE</span><h2>Estatísticas e biodiversidade</h2><p>Composição funcional e índices exploratórios por cultura.</p></div>
+<label class="compact-select">Cultura<select id="statsCrop"></select></label></div>
+<div class="stats-layout"><div class="card"><h3>Composição funcional</h3><div id="functionalBars" class="bars"></div></div>
+<div class="card"><h3>Índices de biodiversidade</h3><div id="indicesTable" class="indices-table"></div></div></div>
+<div class="notice">Os índices apresentados possuem caráter exploratório e representam a diversidade taxonômica operacional dos registros disponíveis no BioBanco. Não correspondem necessariamente à diversidade de espécies das comunidades amostradas.</div>
+</section>
+
+<section id="sobre" class="section alt">
+<div class="section-head"><div><span class="eyebrow">PROJETO</span><h2>Sobre o BioBanco</h2></div></div>
+<div class="about-grid">
+<div class="card about-main"><p>O BioBanco Digital de Organismos Não Alvo foi desenvolvido para organizar, padronizar e disponibilizar registros taxonômicos, ecológicos e fotográficos de organismos associados a sistemas agrícolas.</p><p>A plataforma integra imagens padronizadas, identificação taxonômica revisada e classificação funcional, apoiando estudos de biodiversidade, controle biológico, manejo integrado de pragas e conservação de organismos benéficos.</p></div>
+<div class="card"><strong>Instituição</strong><span>IF Goiano – Campus Urutaí</span></div>
+<div class="card"><strong>Centro</strong><span>Centro de Excelência em Bioinsumos – CEBIO</span></div>
+<div class="card"><strong>Base atual</strong><span id="aboutTotal">— registros em 6 culturas</span></div>
+</div></section>
+</main>
+<dialog id="recordDialog"><button id="closeDialog" class="dialog-close" aria-label="Fechar">×</button><div id="recordDetail"></div></dialog>
+<footer><strong>BioBanco Digital</strong><span>Organismos Não Alvo em Sistemas Agrícolas</span></footer>
+<script src="app.js"></script>
+</body></html>
