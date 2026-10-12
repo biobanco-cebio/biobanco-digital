@@ -26,6 +26,55 @@ function formatTaxonHTML(text,resolucao=''){
 
   return raw.split(';').map(formatParte).join('; ');
 }
+
+
+function formatObservationHTML(text,generoTaxon=''){
+  const raw=String(text||'').trim();
+  if(!raw)return '';
+
+  let html=esc(raw);
+
+  const taxon=String(generoTaxon||'').trim();
+
+  if(!taxon || /^indeterminado$/i.test(taxon)){
+    return html;
+  }
+
+  const genero=taxon.split(/\s+/)[0];
+
+  if(!genero){
+    return html;
+  }
+
+  const generoSeguro=genero.replace(
+    /[.*+?^${}()|[\]\\]/g,
+    '\\$&'
+  );
+
+  // Gênero + sp.
+  const regexSp=new RegExp(
+    `\\b${generoSeguro}\\s+sp\\.`,
+    'g'
+  );
+
+  html=html.replace(
+    regexSp,
+    `<em>${genero}</em> sp.`
+  );
+
+  // Gênero + espécie
+  const regexEspecie=new RegExp(
+    `\\b${generoSeguro}\\s+([a-zA-Z-]+)`,
+    'g'
+  );
+
+  html=html.replace(
+    regexEspecie,
+    `<em>${genero} $1</em>`
+  );
+
+  return html;
+}
 function renderRecords(){
   const total=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
 
@@ -247,13 +296,16 @@ function openRecord(code){
         ${
           r.observacao_funcional
           ? `
-            <section class="detail-section observacao">
-              <h3>Observação funcional</h3>
+           <section class="detail-section observacao">
+  <h3>Observação funcional</h3>
 
-              <p>
-                ${esc(r.observacao_funcional)}
-              </p>
-            </section>
+  <p>
+   ${formatObservationHTML(
+  r.observacao_funcional,
+  r.genero_taxon_validado
+)}
+  </p>
+</section>
           `
           : ''
         }
