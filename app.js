@@ -1,5 +1,14 @@
-let REGISTROS=[],CULTURAS=[],INDICES=[],filtered=[],page=1;const PAGE_SIZE=16,$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],unique=a=>[...new Set(a.filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),'pt-BR',{numeric:true}));
-async function loadData(){[REGISTROS,CULTURAS,INDICES]=await Promise.all([fetch('dados/registros.json').then(r=>r.json()),fetch('dados/culturas.json').then(r=>r.json()),fetch('dados/indices.json').then(r=>r.json())]);init()}
+let REGISTROS=[],CULTURAS=[],INDICES=[],DESCRICOES={},filtered=[],page=1;const PAGE_SIZE=16,$=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],unique=a=>[...new Set(a.filter(Boolean))].sort((a,b)=>String(a).localeCompare(String(b),'pt-BR',{numeric:true}));
+async function loadData(){
+  [REGISTROS,CULTURAS,INDICES,DESCRICOES]=await Promise.all([
+    fetch('dados/registros.json').then(r=>r.json()),
+    fetch('dados/culturas.json').then(r=>r.json()),
+    fetch('dados/indices.json').then(r=>r.json()),
+    fetch('dados/descricoes-ecologicas.json').then(r=>r.json())
+  ]);
+
+  init();
+}
 function init(){$('#kpiTotal').textContent=REGISTROS.length;$('#aboutTotal').textContent=`${REGISTROS.length} registros em ${CULTURAS.length} culturas`;$('#kpiCategorias').textContent=unique(REGISTROS.map(r=>r.categoria_funcional)).length;fill('#fCultura',unique(REGISTROS.map(r=>r.cultura)));fill('#fOrdem',unique(REGISTROS.map(r=>r.ordem)));fill('#fFamilia',unique(REGISTROS.map(r=>r.familia)));fill('#fCategoria',unique(REGISTROS.map(r=>r.categoria_funcional)));fill('#fResolucao',unique(REGISTROS.map(r=>r.resolucao_taxonomica)));fill('#statsCrop',CULTURAS.map(c=>c.cultura),false);renderCrops();applyFilters();renderStats(CULTURAS[0]?.cultura);['#fCodigo','#fCultura','#fOrdem','#fFamilia','#fCategoria','#fResolucao'].forEach(id=>$(id).addEventListener(id==='#fCodigo'?'input':'change',()=>{page=1;applyFilters()}));$('#clearFilters').onclick=()=>{['#fCodigo','#fCultura','#fOrdem','#fFamilia','#fCategoria','#fResolucao'].forEach(id=>$(id).value='');page=1;applyFilters()};$('#statsCrop').onchange=e=>renderStats(e.target.value);$('#menuBtn').onclick=()=>$('#nav').classList.toggle('open');$$('#nav a').forEach(a=>a.onclick=()=>$('#nav').classList.remove('open'));$('#closeDialog').onclick=()=>$('#recordDialog').close();$('#recordDialog').onclick=e=>{if(e.target===$('#recordDialog'))$('#recordDialog').close()}}
 function fill(sel,vals,keep=true){const e=$(sel);if(!keep)e.innerHTML='';vals.forEach(v=>{const o=document.createElement('option');o.value=v;o.textContent=v;e.appendChild(o)})}
 function applyFilters(){const c=$('#fCodigo').value.trim().toLowerCase(),cu=$('#fCultura').value,o=$('#fOrdem').value,f=$('#fFamilia').value,cat=$('#fCategoria').value,res=$('#fResolucao').value;filtered=REGISTROS.filter(r=>(!c||r.codigo.toLowerCase().includes(c))&&(!cu||r.cultura===cu)&&(!o||r.ordem===o)&&(!f||r.familia===f)&&(!cat||r.categoria_funcional===cat)&&(!res||r.resolucao_taxonomica===res));$('#resultCount').textContent=filtered.length;renderRecords()}
