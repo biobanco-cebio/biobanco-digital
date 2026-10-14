@@ -84,6 +84,63 @@ function formatObservationHTML(text,generoTaxon=''){
 
   return html;
 }
+function getDescricaoEcologica(r){
+  if(!r || !DESCRICOES)return '';
+
+  const taxonomia=String(r.taxonomia_validada||'').trim();
+  const generoValidado=String(r.genero_taxon_validado||'').trim();
+  const familia=String(r.familia||'').trim();
+  const categoria=String(r.categoria_funcional||'').trim();
+
+  // 1. Procura espécie ou gênero específico
+  if(DESCRICOES.taxons){
+
+    for(const chave of Object.keys(DESCRICOES.taxons)){
+      if(
+        taxonomia.toLowerCase().includes(chave.toLowerCase()) ||
+        generoValidado.toLowerCase().includes(chave.toLowerCase())
+      ){
+        return DESCRICOES.taxons[chave];
+      }
+    }
+
+    // Se houver gênero validado, procura apenas pelo primeiro nome
+    if(generoValidado){
+      const genero=generoValidado.split(/\s+/)[0];
+
+      if(DESCRICOES.taxons[genero]){
+        return DESCRICOES.taxons[genero];
+      }
+    }
+  }
+
+  // 2. Procura descrição da família
+  if(
+    familia &&
+    DESCRICOES.familias &&
+    DESCRICOES.familias[familia]
+  ){
+    return DESCRICOES.familias[familia];
+  }
+
+  // 3. Usa categoria funcional como descrição geral
+  if(DESCRICOES.categorias){
+
+    if(DESCRICOES.categorias[categoria]){
+      return DESCRICOES.categorias[categoria];
+    }
+
+    if(/indeterminado/i.test(categoria)){
+      return DESCRICOES.categorias.Indeterminado || '';
+    }
+
+    if(/outros/i.test(categoria)){
+      return DESCRICOES.categorias.Outros || '';
+    }
+  }
+
+  return '';
+}
 function renderRecords(){
   const total=Math.max(1,Math.ceil(filtered.length/PAGE_SIZE));
 
