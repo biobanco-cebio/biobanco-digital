@@ -359,22 +359,22 @@ function openRecord(code){
         </section>
 
 
-        ${
-          r.observacao_funcional
-          ? `
-           <section class="detail-section observacao">
-  <h3>Observação funcional</h3>
+      ${
+  getDescricaoEcologica(r)
+  ? `
+    <section class="detail-section observacao">
+      <h3>Descrição ecológica</h3>
 
-  <p>
-   ${formatObservationHTML(
-  r.observacao_funcional,
-  r.genero_taxon_validado
-)}
-  </p>
-</section>
-          `
-          : ''
-        }
+      <p>
+        ${formatObservationHTML(
+          getDescricaoEcologica(r),
+          r.genero_taxon_validado
+        )}
+      </p>
+    </section>
+  `
+  : ''
+}
 
       </div>
 
