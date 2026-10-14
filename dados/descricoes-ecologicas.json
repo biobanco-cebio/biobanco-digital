@@ -1,0 +1,40 @@
+{
+  "categorias": {
+    "Predador": "Predadores alimentam-se de outros artrópodes durante parte ou todo o ciclo de vida, podendo contribuir para a regulação natural de populações de organismos fitófagos nos agroecossistemas.",
+    "Parasitoide": "Parasitoides utilizam outros artrópodes como hospedeiros durante o desenvolvimento das formas imaturas, geralmente levando à morte do hospedeiro e contribuindo para a regulação natural de populações de insetos.",
+    "Polinizador": "Polinizadores visitam flores em busca de recursos como néctar e pólen e podem contribuir para a transferência de pólen e para a reprodução de espécies vegetais presentes nos agroecossistemas.",
+    "Fitófago": "Organismos fitófagos utilizam tecidos ou estruturas vegetais como recurso alimentar, podendo consumir folhas, caules, flores, frutos, sementes ou seiva, dependendo do grupo taxonômico.",
+    "Outros": "Esta categoria reúne organismos cuja função ecológica não se enquadra diretamente nas classes de predadores, parasitoides, polinizadores ou fitófagos, podendo incluir diferentes hábitos tróficos e funções no agroecossistema.",
+    "Indeterminado": "A função ecológica deste registro não foi atribuída com segurança devido ao nível de identificação taxonômica disponível, evitando inferências funcionais sem suporte suficiente."
+  },
+  "familias": {
+    "Chrysopidae": "Larvas de crisopídeos são importantes predadores de pequenos artrópodes, incluindo pulgões, moscas-brancas e outros insetos de corpo mole, contribuindo para a regulação natural de pragas em agroecossistemas.",
+    "Dolichopodidae": "Adultos de Dolichopodidae são predominantemente predadores de pequenos artrópodes e podem contribuir para a redução natural de populações de organismos associados aos cultivos.",
+    "Syrphidae": "Syrphidae pode exercer funções distintas ao longo do ciclo de vida: adultos visitam flores e podem atuar na polinização, enquanto larvas de muitas espécies são predadoras, especialmente de pulgões e outros Hemiptera de corpo mole.",
+    "Staphylinidae": "Diversas espécies de Staphylinidae atuam como predadoras de pequenos invertebrados e formas imaturas de insetos; alguns grupos também apresentam hábitos ecológicos distintos, por isso a função deve ser interpretada conforme a identificação disponível.",
+    "Reduviidae": "Reduviídeos predadores capturam e consomem diferentes artrópodes e incluem espécies associadas à regulação natural de insetos-praga em agroecossistemas.",
+    "Ichneumonidae": "Ichneumonidae reúne parasitoides de diversos grupos de insetos; suas larvas desenvolvem-se associadas a hospedeiros e podem contribuir para a regulação natural de populações de outros artrópodes.",
+    "Braconidae": "Braconídeos são parasitoides de diferentes grupos de insetos e incluem táxons de importância no controle biológico.",
+    "Trichogrammatidae": "Trichogrammatidae inclui pequenos parasitoides de ovos; alguns gêneros são amplamente utilizados no controle biológico por interromperem o desenvolvimento do hospedeiro ainda na fase de ovo.",
+    "Aphelinidae": "Aphelinidae reúne principalmente parasitoides de Hemiptera de corpo mole, incluindo moscas-brancas, cochonilhas e pulgões, com diversas espécies utilizadas em programas de controle biológico.",
+    "Scelionidae": "Scelionidae inclui principalmente parasitoides de ovos de artrópodes; diversos gêneros estão associados ao parasitismo de ovos de Hemiptera e têm importância como inimigos naturais.",
+    "Chalcididae": "Chalcididae inclui principalmente parasitoides de larvas e pupas, especialmente de Lepidoptera, embora outros grupos de insetos também possam ser utilizados como hospedeiros.",
+    "Apidae": "Abelhas da família Apidae visitam flores para obtenção de recursos e incluem importantes polinizadores de plantas silvestres e culturas agrícolas.",
+    "Pompilidae": "Pompilidae é formado principalmente por vespas especializadas em aranhas: as fêmeas capturam e paralisam aranhas que servem de recurso para o desenvolvimento das larvas; adultos também podem visitar flores.",
+    "Crabronidae": "Vespas desta família incluem espécies que capturam outros artrópodes para provisionar seus ninhos; a função específica depende do gênero e do tipo de presa utilizado."
+  },
+  "taxons": {
+    "Diplazon laetatorius": "Parasitoide associado principalmente a sirfídeos (Syrphidae). O desenvolvimento ocorre no hospedeiro e o adulto emerge do pupário, podendo contribuir para a regulação de populações de sirfídeos no agroecossistema.",
+    "Chelonus": "Espécies de Chelonus incluem parasitoides ovo-larvais de Lepidoptera: o parasitismo inicia-se no ovo e o desenvolvimento do parasitoide continua durante a fase larval do hospedeiro.",
+    "Encarsia": "Encarsia reúne parasitoides de moscas-brancas, desenvolvendo-se em ninfas do hospedeiro. Espécies do gênero são utilizadas no controle biológico de Aleyrodidae.",
+    "Eretmocerus": "Espécies de Eretmocerus são parasitoides de moscas-brancas e completam seu desenvolvimento associadas às ninfas do hospedeiro, sendo importantes inimigos naturais de Aleyrodidae.",
+    "Conura": "Espécies de Conura atuam como parasitoides de estágios imaturos de outros insetos, especialmente pupas, podendo utilizar diferentes grupos de hospedeiros.",
+    "Trypoxylon": "Vespas de Trypoxylon capturam aranhas, que são paralisadas e utilizadas para provisionar os ninhos e alimentar as larvas.",
+    "Ophion": "Espécies de Ophion são parasitoides principalmente de larvas de Lepidoptera e podem contribuir para a regulação natural de populações de lagartas.",
+    "Campoletis": "Espécies de Campoletis incluem parasitoides larvais de Lepidoptera e podem atuar como inimigos naturais de lagartas em agroecossistemas.",
+    "Pristomerus": "Espécies de Pristomerus atuam como parasitoides de larvas de Lepidoptera, utilizando lagartas como hospedeiros durante o desenvolvimento das formas imaturas.",
+    "Netelia": "Espécies de Netelia são parasitoides associados principalmente a larvas de Lepidoptera, podendo contribuir para a regulação natural de populações de lagartas.",
+    "Calliscelio": "Representantes de Calliscelio estão associados ao parasitismo de ovos de artrópodes. O desenvolvimento ocorre no interior do ovo do hospedeiro.",
+    "Oligosita": "Oligosita pertence a Trichogrammatidae e inclui pequenos parasitoides de ovos de insetos, podendo contribuir para interromper o desenvolvimento do hospedeiro ainda na fase de ovo."
+  }
+}
