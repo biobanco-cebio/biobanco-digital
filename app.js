@@ -387,6 +387,285 @@ function openRecord(code){
 }
 function renderCrops(){$('#cropGrid').innerHTML=CULTURAS.map(c=>`<article class="crop-card"><span class="eyebrow">${esc(c.cultura.toUpperCase())}</span><h3>${esc(c.cultura)}</h3><div class="crop-total">${c.total}</div><small>registros</small><div class="crop-stats">${Object.entries(c.categorias).sort((a,b)=>b[1]-a[1]).slice(0,4).map(([k,v])=>`<span>${esc(k)}: ${v}</span>`).join('')}</div><button class="btn primary" data-crop="${esc(c.cultura)}">Explorar registros</button></article>`).join('');$$('[data-crop]').forEach(b=>b.onclick=()=>{$('#fCultura').value=b.dataset.crop;page=1;applyFilters();location.hash='pesquisar'})}
 function renderStats(cultura){const c=CULTURAS.find(x=>x.cultura===cultura);if(!c)return;const es=Object.entries(c.categorias).sort((a,b)=>b[1]-a[1]),mx=Math.max(...es.map(x=>x[1]),1);$('#functionalBars').innerHTML=es.map(([k,v])=>`<div class="bar-row"><span>${esc(k)}</span><div class="bar-track"><div class="bar-fill" style="width:${v/mx*100}%"></div></div><strong>${v}</strong></div>`).join('');const idx=findIdx(cultura),pairs=[];if(idx)Object.entries(idx).forEach(([k,v])=>{if(!k.toLowerCase().includes('cultura')&&v!==null&&v!=='')pairs.push([k,v])});$('#indicesTable').innerHTML=(pairs.length?pairs:[['Cultura',cultura]]).map(([k,v])=>`<div>${esc(k)}</div><div class="v">${fmt(v)}</div>`).join('')}
+function renderComparacaoGeral(){
+
+  const culturas=CULTURAS || [];
+
+  /* =========================
+     1. NÚMERO DE REGISTROS
+  ========================= */
+
+  const maxReg=Math.max(
+    ...culturas.map(c=>Number(c.total)||0),
+    1
+  );
+
+  const elReg=$("#registrosComparacao");
+
+  if(elReg){
+    elReg.innerHTML=culturas.map(c=>{
+
+      const total=Number(c.total)||0;
+
+      return `
+        <div class="comparison-row">
+
+          <div class="comparison-label">
+            ${esc(c.cultura)}
+          </div>
+
+          <div class="comparison-track">
+            <div
+              class="comparison-fill"
+              style="width:${(total/maxReg)*100}%"
+            ></div>
+          </div>
+
+          <strong>${total}</strong>
+
+        </div>
+      `;
+    }).join('');
+  }
+
+
+  /* =========================
+     2. RIQUEZA DE UTOs
+  ========================= */
+
+  const riquezaDados=culturas.map(c=>{
+
+    const idx=findIdx(c.cultura);
+
+    if(!idx){
+      return {
+        cultura:c.cultura,
+        riqueza:0
+      };
+    }
+
+    const chave=Object.keys(idx).find(k=>{
+      const n=String(k)
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g,'')
+        .toLowerCase();
+
+      return (
+        n.includes('riqueza') ||
+        n.includes('utos')
+      );
+    });
+
+    return {
+      cultura:c.cultura,
+      riqueza:chave ? Number(idx[chave])||0 : 0
+    };
+
+  });
+
+  const maxRiqueza=Math.max(
+    ...riquezaDados.map(x=>x.riqueza),
+    1
+  );
+
+  const elRiqueza=$("#riquezaComparacao");
+
+  if(elRiqueza){
+    elRiqueza.innerHTML=riquezaDados.map(x=>`
+
+      <div class="comparison-row">
+
+        <div class="comparison-label">
+          ${esc(x.cultura)}
+        </div>
+
+        <div class="comparison-track">
+          <div
+            class="comparison-fill"
+            style="width:${(x.riqueza/maxRiqueza)*100}%"
+          ></div>
+        </div>
+
+        <strong>${fmt(x.riqueza)}</strong>
+
+      </div>
+
+    `).join('');
+  }
+
+
+  /* =========================
+     3. COMPOSIÇÃO FUNCIONAL %
+  ========================= */
+
+  const categorias=[
+    'Parasitoide',
+    'Predador',
+    'Polinizador',
+    'Fitófago',
+    'Outros',
+    'Indeterminado'
+  ];
+
+  const elComp=$("#composicaoComparativa");
+
+  if(elComp){
+
+    elComp.innerHTML=culturas.map(c=>{
+
+      const total=Number(c.total)||1;
+      const cats=c.categorias || {};
+
+      const segmentos=categorias.map(cat=>{
+
+        let valor=Number(cats[cat])||0;
+
+        /*
+          Compatibilidade com possíveis nomes
+          ligeiramente diferentes no JSON
+        */
+
+        if(cat==='Indeterminado' && !valor){
+
+          const chave=Object.keys(cats).find(k=>
+            /indetermin/i.test(k)
+          );
+
+          if(chave){
+            valor=Number(cats[chave])||0;
+          }
+        }
+
+        if(cat==='Outros' && !valor){
+
+          const chave=Object.keys(cats).find(k=>
+            /outro/i.test(k)
+          );
+
+          if(chave){
+            valor=Number(cats[chave])||0;
+          }
+        }
+
+        const pct=(valor/total)*100;
+
+        if(valor===0)return '';
+
+        return `
+          <div
+            class="functional-segment"
+            data-category="${esc(cat)}"
+            style="width:${pct}%"
+            title="${esc(cat)}: ${valor} (${pct.toFixed(1)}%)"
+          >
+          </div>
+        `;
+
+      }).join('');
+
+      return `
+        <div class="functional-comparison-row">
+
+          <div class="functional-crop">
+            ${esc(c.cultura)}
+          </div>
+
+          <div class="functional-stack">
+            ${segmentos}
+          </div>
+
+        </div>
+      `;
+
+    }).join('');
+
+  }
+
+
+  /* =========================
+     4. DIVERSIDADE
+  ========================= */
+
+  const elDiv=$("#diversidadeComparativa");
+
+  if(elDiv){
+
+    const procurarIndice=(idx,termos)=>{
+
+      if(!idx)return '';
+
+      const chave=Object.keys(idx).find(k=>{
+
+        const n=String(k)
+          .normalize('NFD')
+          .replace(/[\u0300-\u036f]/g,'')
+          .toLowerCase();
+
+        return termos.some(t=>n.includes(t));
+
+      });
+
+      return chave ? idx[chave] : '';
+    };
+
+
+    const linhas=culturas.map(c=>{
+
+      const idx=findIdx(c.cultura);
+
+      const shannon=procurarIndice(
+        idx,
+        ['shannon']
+      );
+
+      const simpson=procurarIndice(
+        idx,
+        ['simpson_1_d','simpson 1-d','1-d']
+      );
+
+      const pielou=procurarIndice(
+        idx,
+        ['pielou']
+      );
+
+      return `
+        <tr>
+          <td><strong>${esc(c.cultura)}</strong></td>
+          <td>${fmt(shannon)}</td>
+          <td>${fmt(simpson)}</td>
+          <td>${fmt(pielou)}</td>
+        </tr>
+      `;
+
+    }).join('');
+
+
+    elDiv.innerHTML=`
+      <div class="comparison-table-wrap">
+
+        <table class="comparison-table">
+
+          <thead>
+            <tr>
+              <th>Cultura</th>
+              <th>Shannon (H')</th>
+              <th>Simpson (1-D)</th>
+              <th>Pielou (J')</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            ${linhas}
+          </tbody>
+
+        </table>
+
+      </div>
+    `;
+
+  }
+
+}
 function findIdx(c){const n=s=>String(s||'').normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();return INDICES.find(r=>Object.values(r).some(v=>n(v)===n(c)))}
 function fmt(v){return typeof v==='number'?v.toLocaleString('pt-BR',{maximumFractionDigits:3}):esc(v)}
 function esc(v){return String(v??'').replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]))}
