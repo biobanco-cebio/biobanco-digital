@@ -80,11 +80,165 @@
 </section>
 
 <section id="estatisticas" class="section">
-<div class="section-head"><div><span class="eyebrow">DIVERSIDADE</span><h2>Estatísticas e biodiversidade</h2><p>Composição funcional e índices exploratórios por cultura.</p></div>
-<label class="compact-select">Cultura<select id="statsCrop"></select></label></div>
-<div class="stats-layout"><div class="card"><h3>Composição funcional</h3><div id="functionalBars" class="bars"></div></div>
-<div class="card"><h3>Índices de biodiversidade</h3><div id="indicesTable" class="indices-table"></div></div></div>
-<div class="notice">Os índices apresentados possuem caráter exploratório e representam a diversidade taxonômica operacional dos registros disponíveis no BioBanco. Não correspondem necessariamente à diversidade de espécies das comunidades amostradas.</div>
+
+  <div class="section-head">
+    <div>
+      <span class="eyebrow">DIVERSIDADE</span>
+      <h2>Estatísticas e biodiversidade</h2>
+      <p>Comparação geral entre culturas e indicadores exploratórios dos registros disponíveis no BioBanco.</p>
+    </div>
+  </div>
+
+
+  <!-- COMPARAÇÃO GERAL ENTRE CULTURAS -->
+
+  <div class="comparacao-geral">
+
+    <div class="comparacao-header">
+      <span class="eyebrow">VISÃO GERAL</span>
+      <h3>Comparação geral entre culturas</h3>
+      <p>
+        Síntese comparativa dos 307 registros distribuídos entre as seis
+        culturas agrícolas avaliadas.
+      </p>
+    </div>
+
+
+    <!-- Totais por cultura -->
+
+    <div class="comparacao-kpis">
+
+      <div class="comparacao-kpi">
+        <strong>54</strong>
+        <span>Algodão</span>
+      </div>
+
+      <div class="comparacao-kpi">
+        <strong>48</strong>
+        <span>Cebola</span>
+      </div>
+
+      <div class="comparacao-kpi">
+        <strong>34</strong>
+        <span>Cenoura</span>
+      </div>
+
+      <div class="comparacao-kpi">
+        <strong>65</strong>
+        <span>Milho</span>
+      </div>
+
+      <div class="comparacao-kpi">
+        <strong>42</strong>
+        <span>Soja</span>
+      </div>
+
+      <div class="comparacao-kpi">
+        <strong>64</strong>
+        <span>Tomate industrial</span>
+      </div>
+
+    </div>
+
+
+    <!-- Gráficos comparativos -->
+
+    <div class="comparacao-grid">
+
+      <div class="card comparacao-card">
+        <h3>Número de registros por cultura</h3>
+        <p class="comparacao-subtitulo">
+          Distribuição dos registros disponíveis no BioBanco.
+        </p>
+
+        <div id="registrosComparacao" class="comparison-bars"></div>
+      </div>
+
+
+      <div class="card comparacao-card">
+        <h3>Riqueza taxonômica operacional</h3>
+        <p class="comparacao-subtitulo">
+          Número de unidades taxonômicas operacionais (UTOs) observadas por cultura.
+        </p>
+
+        <div id="riquezaComparacao" class="comparison-bars"></div>
+      </div>
+
+    </div>
+
+
+    <div class="card comparacao-card comparacao-funcional">
+
+      <h3>Composição funcional relativa (%)</h3>
+
+      <p class="comparacao-subtitulo">
+        Proporção de parasitoides, predadores, polinizadores e demais
+        categorias funcionais em cada cultura.
+      </p>
+
+      <div id="composicaoComparativa"></div>
+
+    </div>
+
+
+    <div class="card comparacao-card">
+
+      <h3>Índices de diversidade</h3>
+
+      <p class="comparacao-subtitulo">
+        Comparação exploratória dos índices de Shannon, Simpson e equitabilidade
+        de Pielou entre as seis culturas.
+      </p>
+
+      <div id="diversidadeComparativa"></div>
+
+    </div>
+
+  </div>
+
+
+  <!-- ANÁLISE INDIVIDUAL POR CULTURA -->
+
+  <div class="estatistica-individual">
+
+    <div class="comparacao-header">
+      <span class="eyebrow">POR CULTURA</span>
+      <h3>Detalhamento por cultura</h3>
+      <p>
+        Selecione uma cultura para consultar sua composição funcional e
+        seus índices exploratórios.
+      </p>
+    </div>
+
+    <label class="compact-select">
+      Cultura
+      <select id="statsCrop"></select>
+    </label>
+
+    <div class="stats-layout">
+
+      <div class="card">
+        <h3>Composição funcional</h3>
+        <div id="functionalBars" class="bars"></div>
+      </div>
+
+      <div class="card">
+        <h3>Índices de biodiversidade</h3>
+        <div id="indicesTable" class="indices-table"></div>
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <div class="notice">
+    Os índices apresentados possuem caráter exploratório e representam a
+    diversidade taxonômica operacional dos registros disponíveis no BioBanco.
+    Não correspondem necessariamente à diversidade de espécies das comunidades
+    amostradas.
+  </div>
+
 </section>
 
 <section id="sobre" class="section alt">
