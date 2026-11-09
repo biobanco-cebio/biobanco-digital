@@ -470,3 +470,98 @@ footer{padding:28px clamp(18px,5vw,72px);background:#092f21;color:#fff;display:f
     font-size:12px;
   }
 }
+/* ===== COMPOSIÇÃO FUNCIONAL COMPARATIVA ===== */
+
+.comparacao-funcional{
+  margin-top:20px;
+}
+
+#composicaoComparativa{
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+  margin-top:20px;
+}
+
+.functional-comparison-row{
+  display:grid;
+  grid-template-columns:140px 1fr;
+  gap:16px;
+  align-items:center;
+}
+
+.functional-crop{
+  font-size:14px;
+  font-weight:700;
+  color:#173d2c;
+}
+
+.functional-stack{
+  display:flex;
+  width:100%;
+  height:22px;
+  border-radius:999px;
+  overflow:hidden;
+  background:#edf3ef;
+}
+
+/* Cores por categoria */
+
+.functional-segment[data-category="Parasitoide"]{
+  background:#14794f;
+}
+
+.functional-segment[data-category="Predador"]{
+  background:#62a84f;
+}
+
+.functional-segment[data-category="Polinizador"]{
+  background:#d4a62a;
+}
+
+.functional-segment[data-category="Fitófago"]{
+  background:#c86b47;
+}
+
+.functional-segment[data-category="Outros"]{
+  background:#8b8f93;
+}
+
+.functional-segment[data-category="Indeterminado"]{
+  background:#cfd8d2;
+}
+
+/* Legenda */
+
+.functional-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 18px;
+  margin-top:18px;
+  font-size:12px;
+  color:#65736b;
+}
+
+.functional-legend-item{
+  display:flex;
+  align-items:center;
+  gap:7px;
+}
+
+.functional-legend-color{
+  width:12px;
+  height:12px;
+  border-radius:3px;
+}
+
+@media(max-width:700px){
+
+  .functional-comparison-row{
+    grid-template-columns:1fr;
+    gap:6px;
+  }
+
+  .functional-stack{
+    height:20px;
+  }
+}
