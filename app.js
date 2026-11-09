@@ -494,7 +494,7 @@ function renderComparacaoGeral(){
   }
 
 
-  /* =========================
+    /* =========================
      3. COMPOSIÇÃO FUNCIONAL %
   ========================= */
 
@@ -513,40 +513,51 @@ function renderComparacaoGeral(){
 
     elComp.innerHTML=culturas.map(c=>{
 
-      const total=Number(c.total)||1;
-      const cats=c.categorias || {};
+      const registrosCultura=REGISTROS.filter(
+        r=>r.cultura===c.cultura
+      );
+
+      const total=registrosCultura.length || 1;
+
+      const contagem={
+        Parasitoide:0,
+        Predador:0,
+        Polinizador:0,
+        'Fitófago':0,
+        Outros:0,
+        Indeterminado:0
+      };
+
+      registrosCultura.forEach(r=>{
+
+        const cat=String(
+          r.categoria_funcional || ''
+        ).trim();
+
+        if(/^parasitoide$/i.test(cat)){
+          contagem.Parasitoide++;
+        }
+        else if(/^predador$/i.test(cat)){
+          contagem.Predador++;
+        }
+        else if(/^polinizador$/i.test(cat)){
+          contagem.Polinizador++;
+        }
+        else if(/fit[oó]fago/i.test(cat)){
+          contagem['Fitófago']++;
+        }
+        else if(/outro/i.test(cat)){
+          contagem.Outros++;
+        }
+        else{
+          contagem.Indeterminado++;
+        }
+
+      });
 
       const segmentos=categorias.map(cat=>{
 
-        let valor=Number(cats[cat])||0;
-
-        /*
-          Compatibilidade com possíveis nomes
-          ligeiramente diferentes no JSON
-        */
-
-        if(cat==='Indeterminado' && !valor){
-
-          const chave=Object.keys(cats).find(k=>
-            /indetermin/i.test(k)
-          );
-
-          if(chave){
-            valor=Number(cats[chave])||0;
-          }
-        }
-
-        if(cat==='Outros' && !valor){
-
-          const chave=Object.keys(cats).find(k=>
-            /outro/i.test(k)
-          );
-
-          if(chave){
-            valor=Number(cats[chave])||0;
-          }
-        }
-
+        const valor=contagem[cat] || 0;
         const pct=(valor/total)*100;
 
         if(valor===0)return '';
@@ -557,8 +568,7 @@ function renderComparacaoGeral(){
             data-category="${esc(cat)}"
             style="width:${pct}%"
             title="${esc(cat)}: ${valor} (${pct.toFixed(1)}%)"
-          >
-          </div>
+          ></div>
         `;
 
       }).join('');
