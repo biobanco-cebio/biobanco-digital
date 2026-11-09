@@ -565,3 +565,50 @@ footer{padding:28px clamp(18px,5vw,72px);background:#092f21;color:#fff;display:f
     height:20px;
   }
 }
+
+.functional-legend{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px 18px;
+  margin-top:18px;
+  align-items:center;
+}
+
+.functional-legend-item{
+  display:flex;
+  align-items:center;
+  gap:7px;
+  font-size:12px;
+  color:#65736b;
+}
+
+.functional-legend-color{
+  width:13px;
+  height:13px;
+  border-radius:3px;
+  display:inline-block;
+}
+
+.functional-legend-color.parasitoide{
+  background:#14794f;
+}
+
+.functional-legend-color.predador{
+  background:#62a84f;
+}
+
+.functional-legend-color.polinizador{
+  background:#d4a62a;
+}
+
+.functional-legend-color.fitofago{
+  background:#c86b47;
+}
+
+.functional-legend-color.outros{
+  background:#8b8f93;
+}
+
+.functional-legend-color.indeterminado{
+  background:#cfd8d2;
+}
