@@ -573,65 +573,6 @@ function renderComparacaoGeral(){
 
       }).join('');
 
-    
-  return `
-    <div class="functional-comparison-row">
-
-      <div class="functional-crop">
-        ${esc(c.cultura)}
-      </div>
-
-      <div class="functional-stack">
-        ${segmentos}
-      </div>
-
-    </div>
-  `;
-
-}).join('');
-
-
-elComp.innerHTML += `
-  <div class="functional-legend">
-
-    <div class="functional-legend-item">
-      <span class="functional-legend-color" style="background:#14794f"></span>
-      Parasitoide
-    </div>
-
-    <div class="functional-legend-item">
-      <span class="functional-legend-color" style="background:#62a84f"></span>
-      Predador
-    </div>
-
-    <div class="functional-legend-item">
-      <span class="functional-legend-color" style="background:#d4a62a"></span>
-      Polinizador
-    </div>
-
-    <div class="functional-legend-item">
-      <span class="functional-legend-color" style="background:#c86b47"></span>
-      Fitófago
-    </div>
-
-    <div class="functional-legend-item">
-      <span class="functional-legend-color" style="background:#8b8f93"></span>
-      Outros
-    </div>
-
-    <div class="functional-legend-item">
-      <span class="functional-legend-color" style="background:#cfd8d2"></span>
-      Indeterminado
-    </div>
-
-  </div>
-`;
-
-}
-
-/* =========================
-   4. DIVERSIDADE
-========================= */
       return `
         <div class="functional-comparison-row">
 
