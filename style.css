@@ -613,3 +613,47 @@ footer{padding:28px clamp(18px,5vw,72px);background:#092f21;color:#fff;display:f
 .functional-legend-color.indeterminado{
   background:#cfd8d2;
 }
+/* ===== SOBRE O BIOBANCO - BLOCO METODOLÓGICO ===== */
+
+.about-method{
+  grid-column:1 / -1;
+  padding:28px 32px;
+  background:#f7faf8;
+}
+
+.about-method h3{
+  margin:0 0 16px;
+  font-size:22px;
+  color:#173d2c;
+}
+
+.about-method p{
+  margin:0 0 14px;
+  color:#596a61;
+  line-height:1.7;
+  font-size:15px;
+}
+
+.about-method p:last-child{
+  margin-bottom:0;
+}
+
+.about-note{
+  margin-top:18px !important;
+  padding:14px 16px;
+  border-left:4px solid #14794f;
+  background:#eef6f1;
+  color:#42584d !important;
+  border-radius:8px;
+  font-size:14px !important;
+}
+
+@media(max-width:700px){
+  .about-method{
+    padding:22px 20px;
+  }
+
+  .about-method h3{
+    font-size:19px;
+  }
+}
